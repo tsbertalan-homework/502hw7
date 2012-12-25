@@ -1,0 +1,108 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      2516,         98]
+NotebookOptionsPosition[      2170,         81]
+NotebookOutlinePosition[      2508,         96]
+CellTagsIndexPosition[      2465,         93]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"n", "*", "pi"}], ")"}], "^", "2"}]}], "*", "wnm"}], " ", "+", 
+   " ", 
+   RowBox[{"2", "*", 
+    RowBox[{"m", "/", "n"}], "*", 
+    RowBox[{"(", 
+     RowBox[{"1", "-", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"-", "1"}], ")"}], "^", "n"}]}], ")"}]}], "-", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"n", "*", "pi"}], ")"}], "^", "2"}], "*", "wnm"}]}], "\[Equal]",
+   "0"}], "\[IndentingNewLine]", 
+ RowBox[{"Solve", "[", 
+  RowBox[{"%", ",", "wnm"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.564405407245357*^9, 3.564405490770119*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   FractionBox[
+    RowBox[{"2", " ", 
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"-", "1"}], ")"}], "n"]}], ")"}], " ", "m"}], "n"], "-", 
+   RowBox[{"2", " ", 
+    SuperscriptBox["n", "2"], " ", 
+    SuperscriptBox["pi", "2"], " ", "wnm"}]}], "\[Equal]", "0"}]], "Output",
+ CellChangeTimes->{3.564405496615459*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"wnm", "\[Rule]", 
+    RowBox[{"-", 
+     FractionBox[
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"-", "1"}], "+", 
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{"-", "1"}], ")"}], "n"]}], ")"}], " ", "m"}], 
+      RowBox[{
+       SuperscriptBox["n", "3"], " ", 
+       SuperscriptBox["pi", "2"]}]]}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.564405496628598*^9}]
+}, Open  ]]
+},
+WindowSize->{740, 431},
+WindowMargins->{{Automatic, 123}, {Automatic, 28}},
+FrontEndVersion->"8.0 for Linux x86 (32-bit) (February 23, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 680, 23, 50, "Input"],
+Cell[1262, 47, 414, 13, 48, "Output"],
+Cell[1679, 62, 475, 16, 50, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
