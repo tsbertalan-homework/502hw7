@@ -1,0 +1,36 @@
+CHEMICAL ENGINEERING 502 (APC 502)
+Mathematical Methods of Engineering Analysis II
+Homework 7
+DUE: Friday, December 14, in class;
+exercise 4 can be given/emailed any time WITHIN 2012 !
+1. 7.12
+2. To do 7.17 you need to use information about Bessel-type
+eigenproblems; this is contained in section 7.5, but uses
+material from Chapter 4 that we did not do in detail. So I
+want you to read on your own Section 4.16 (enough of it
+to be able to solve the problem) and write me a sentence
+that “you did a good effort to read and understand 4.16,
+also looking up other material from Chapter 4 as
+necessary” -- This should take at least as much time as
+doing Exercise 3.
+3. 7.17
+4. IMPORTANT and different (you are encouraged to do this
+in pairs, and it is acceptable to hand in “the same”
+solution per pair).
+I want you to solve the one-dimensional finite element
+problem in the notes – to do it in MATLAB. Choose an
+epsilon (let’s say 0.5), choose an f(x) and solve it
+analytically first (with the methods in the book). Then, for
+different number of elements in the domain (say 5, 20,
+100) formulate and solve the finite element problem, and
+plot how the error changes as a function of the size of the
+discretization (you have to define a “good” error,
+comparing with the “true” solution you found analytically
+!). When I say “solve in MATLAB” I mean formulate it as
+a set of linear eqations for the 5, 20, 100 unknowns, and
+then ask MATLAB to solve the equations and plot the
+solutions.
+
+I
+
+
