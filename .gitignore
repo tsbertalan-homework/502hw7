@@ -1,2 +1,9 @@
 .spyderproject
 thing.py*
+*.aux
+*.log
+*.tex.backup
+*~
+testInsert.*
+*.toc
+*.lof
