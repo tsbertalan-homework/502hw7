@@ -107,12 +107,13 @@ def do_hw(N, save=False):
         xl_r = list(np.arange(b, c, (c - b) / 100))
         yl_r = [phi_i_r(x) for x in xl_r]
         
-        if i==N-1:
-            ax2.plot(xl_l, yl_l, 'k--', label='scaled linear basis functions, left sides')
-            ax2.plot(xl_r, yl_r, 'k-', label='scaled linear basis functions, right sides')
-        else:
-            ax2.plot(xl_l, yl_l, 'k--')
-            ax2.plot(xl_r, yl_r, 'k-')
+        if save:
+            if i==N-1:
+                ax2.plot(xl_l, yl_l, 'k--', label='scaled linear basis functions, left sides')
+                ax2.plot(xl_r, yl_r, 'k-', label='scaled linear basis functions, right sides')
+            else:
+                ax2.plot(xl_l, yl_l, 'k--')
+                ax2.plot(xl_r, yl_r, 'k-')
     
     #v = -u + 2
 #    print "u:",
@@ -177,12 +178,12 @@ if __name__=="__main__":
     Nmin = 2
     Nmax = 101
     for N in range(Nmin, Nmax):
-        print 'N is', N
+        print 'N is', N,
         if N in to_save:
             error = do_hw(N, save=True)
         else:
             error = do_hw(N, save=False)
-        print "  norm is ", np.linalg.norm(np.array(error))
+        print "; norm is ", np.linalg.norm(np.array(error))
         N_list.append(N)
         norm_list.append(np.linalg.norm(error))
 #        ax3.plot(error, 'k')
