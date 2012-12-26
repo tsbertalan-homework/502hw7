@@ -150,7 +150,7 @@ def do_hw(N, save=False):
         #    ax.plot(xl_fine, [-forcing(x) for x in xl_fine], 'k--', label=r'forcing function $-f(x)=%.2f sin(%.1f x)+%.1f x$' % (amp, omega, m))
     
     
-        ax.plot(xl_fine, [analytical(x) for x in xl_fine], 'k--', label='analytical')
+        ax.plot(xl_fine, [analytical(x) for x in xl_fine], 'k--', label="analytical (via Green's Function")
         fig.suptitle(r'Solution of $\frac{\partial^2 u(x) }{ \partial x^2 }= -f(x)$, BC: $u(0)=1$, $u\'(1)=%.1f$, %i Finite Elements' % (epsilon, N))
         ax.legend(loc='upper left')
         ax2.legend(loc='upper right')
@@ -175,23 +175,28 @@ if __name__=="__main__":
     ax3 = fig3.add_subplot(1, 1, 1)
     to_save = [5, 20, 100]
     N_list = []
-    norm_list = []
     Nmin = 2
     Nmax = 101
+#    Nmax = 20
+    orders=[0, 1, -1, 2, -2]
+    norm_list = [[] for order in orders]
+    ordernames=['order of %i' % order for order in orders]
     for N in range(Nmin, Nmax):
-        print 'N is', N,
+        print 'N is', N
         if N in to_save:
             error = do_hw(N, save=True)
         else:
             error = do_hw(N, save=False)
-        print "; norm is ", np.linalg.norm(np.array(error))
         N_list.append(N)
-        norm_list.append(np.linalg.norm(error))
+        for normIndex in range(len(orders)):
+            norm_list[normIndex].append(np.linalg.norm(error, ord=order))
 #        ax3.plot(error, 'k')
     ax3.set_yscale('log')
     fig3.suptitle('2-norm of the error')
     ax3.set_xlim((Nmin, Nmax))
     ax3.set_xlabel('Number of Basis Functions')
     ax3.set_ylabel('np.linalg.norm(FE_solution - Analytical_solution)')
-    ax3.plot(N_list, norm_list, 'k')
-    fig3.savefig('hw7-error_rate.pdf')
+    for normIndex in range(len(orders)):
+        ax3.plot(N_list, norm_list[normIndex], label=ordernames[normIndex])
+    fig3.legend()
+    fig3.savefig('hw7-error_rate-mult_orders.pdf')
