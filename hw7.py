@@ -160,8 +160,8 @@ def do_hw(N, save=False):
 
     
         #fig.tight_layout()
-        fig.savefig('hw7-solution_and_forcing-N%i.png' % N)
-        fig2.savefig('hw7-basis_functions-N%i.png' % N)
+        fig.savefig('hw7-solution_and_forcing-N%i.pdf' % N)
+        fig2.savefig('hw7-basis_functions-N%i.pdf' % N)
         #plt.show()    
     
     error = []
@@ -193,4 +193,4 @@ if __name__=="__main__":
     ax3.set_xlabel('Number of Basis Functions')
     ax3.set_ylabel('np.linalg.norm(FE_solution - Analytical_solution)')
     ax3.plot(N_list, norm_list, 'k')
-    fig3.savefig('hw7-error_rate.png')
+    fig3.savefig('hw7-error_rate.pdf')
