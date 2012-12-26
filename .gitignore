@@ -8,3 +8,4 @@ testInsert.*
 *.toc
 *.lof
 vectorTest*
+*swp
