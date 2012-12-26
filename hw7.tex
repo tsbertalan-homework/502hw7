@@ -5,9 +5,11 @@
 \usepackage[margin=0.5in]{geometry}
 \usepackage{graphicx}
 
+\usepackage{ulem}  % Allows for double-underlining
+
 \usepackage[T1]{fontenc}
 \usepackage[scaled]{beramono}
-\renewcommand*\familydefault{\ttdefault}
+% \renewcommand*\familydefault{\ttdefault}
 \usepackage{listings}
 
 \lstset{
@@ -202,65 +204,119 @@ Check,
 \section{Finite Element Solution}
 \label{sec:FE_work}
 
+Galerkin Form
+\begin{equation}
+    \label{eqn:galerkin}
+    L[\tilde{u}(x)] - f(x) = \epsilon(x) \approx \vec{0}(x)
+\end{equation}
+\begin{equation}
+    \label{eqn:sumofbases}
+    \tilde{u}(x) = \sum_{i=1}^{N}u_i \phi^i(x)
+\end{equation}
 
+Integrate by parts ($\int \mu d\eta = \mu \eta - \int \eta d\mu$). This reduces the derivatives in the operator from second to first order, which enables the use of linear basis functions.
 
+\begin{equation}
+    \begin{split}
+        \int_a^b{\left[ L[\tilde{u}(x)] - f(x) \right] \phi^i(x) dx } &= 0 \\
+        \int_a^b L[\tilde{u}(x)] \phi^i(x) dx - \int_a^b f(x) \phi^i(x) dx &= 0 \\
+        \int_0^1{ \frac{\partial^2\tilde{u}}{\partial x^2} \phi^i dx } - \int_0^1 f(x) \phi^i(x) dx &= 0 \\
+    \end{split}
+\end{equation}
 
+In the left integral, let $\phi^i(x)=\mu$ and $\frac{\partial^2\tilde{u}}{\partial x^2} dx=d\eta$.
+
+\begin{equation}
+    \begin{split}
+        \phi^i(x) \left. \frac{\partial \tilde u}{\partial x} \right|_0^1 - \int_0^1 \left[\frac{\partial \tilde u}{\partial x} \frac{\partial \phi^i}{\partial x} + f(x) \phi^i(x)\right] \\
+        \phi^i(x) \left. \frac{\partial \tilde u}{\partial x} \right|_0^1 - \int_0^1 \frac{\partial \tilde u}{\partial x} &= \\ \frac{\partial \phi^i}{\partial x} dx = \int_0^1 f(x) \phi^i(x)
+    \end{split}
+\end{equation}
+
+Now using (\ref{eqn:sumofbases}) for $\partial \tilde u / \partial x$ and bringing te derivative inside the sum:
+    
+\begin{equation}
+    \phi^i(x) \sum u_j \frac{\partial \phi^i}{\partial x} - \int_0^1 \frac{\partial \phi^i}{\partial x} \left( \sum u_j \frac{\partial \phi^j}{\partial x} \right) dx = \int_0^1 f(x) \phi^i(x) dx
+\end{equation}
+
+Since all other basis functions are zero at the right side of the domain, the term on the left, includes the right boundary conditions, applies only to the last basis function. This converts the term to $\phi^i \partial \tilde u / \partial x$. Furthermore, a Dirac delta function can be used, changing the term to $\epsilon \delta_{iN}$.
+
+The derivative of $\phi^i$ can be brought inside the adjacent sum, but its product with the derivative of $\phi^j$ is nonzero only for $j=i-1$, $j=i$, and $j=i+1$, by the near-orthogonality of the basis functions. With our linear basis functions, the right-hand-side intergrals must be calculated in piecewise fashion, with the first piece being from the left edge of each hat function to its point, and the second piece being from the point to the right edge.
+
+\pagebreak
+
+This simplifies the equation somewhat.
+
+\begin{equation}
+    \label{eqn:tosolve-sum}
+    \begin{split}
+        \epsilon \delta_{iN} - \int_0^1 \frac{\partial \phi^i}{\partial x} \left( \sum_{j=i-1}^{i+1}u_j \frac{\partial \phi^j}{\partial x} \right) dx &= \int_0^1 f(x) \phi^i(x)dx \\
+        \sum_{j=1}^{N} \left(
+                \int_0^1 \frac{\partial \phi^i}{\partial x} \frac{\partial \phi^j}{\partial x} dx 
+        \right) u_j &= \epsilon \delta_{iN} - \int_0^1 f(x)\phi^i(x)dx \\
+        \uuline{K} \cdot \uline{u} &= \uline{F} 
+    \end{split}
+\end{equation}
+
+Here, $\uuline{K}$ is a tridiagonal square matrix. To satisfy the left boundary condition, the first row of $\uuline{K}$ is $1, 0, 0, ...$, and the first element of $\uline F$ is 1.
+
+Besides the first element, most of the main diagonal of $\uuline K$ is repetitions of $2 / h$, where $h = (1 - 0) / (N - 1)$ is half the width of one of the $N$ basis functions. However, the last value in the main diagonal is only half of this, because the product $\frac{\partial \phi^N}{\partial x} \frac{\partial \phi^N}{\partial x}$ only involves the left slope of the hat for the final basis function. Besides the second element, which is zero to satisfy the left boundary condition, the two off-diagonals are repetitions of $-1 / h$ -- from the product of the (opposite-sign) slopes of the overlapping portions of adjacent basis functions.
 
 \section{Results}
 \label{sec:results}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N5.png}
-    % hw7-basis_functions-N5.png: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N5.pdf}
+    % hw7-basis_functions-N5.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{Five basis functions.}
     \label{fig:N5}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N20.png}
-    % hw7-basis_functions-N20.png: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N20.pdf}
+    % hw7-basis_functions-N20.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{Twenty basis functions.}
     \label{fig:N20}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N100.png}
-    % hw7-basis_functions-N100.png: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N100.pdf}
+    % hw7-basis_functions-N100.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{One hundred basis functions.}
     \label{fig:N100}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-solution_and_forcing-N5.png}
-    % hw7-solution_and_forcing-N5.png: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-solution_and_forcing-N5.pdf}
+    % hw7-solution_and_forcing-N5.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{Solution and forcing, 5 basis functions.}
     \label{fig:sf5}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-solution_and_forcing-N20.png}
-    % hw7-solution_and_forcing-N5.png: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-solution_and_forcing-N20.pdf}
+    % hw7-solution_and_forcing-N5.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{Solution and forcing, 20 basis functions.}
     \label{fig:sf20}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-solution_and_forcing-N100.png}
-    % hw7-solution_and_forcing-N5.png: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-solution_and_forcing-N100.pdf}
+    % hw7-solution_and_forcing-N5.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{Solution and forcing, 100 basis functions.}
     \label{fig:sf100}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-error_rate.png}
-    % hw7-error_rate.png: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-error_rate.pdf}
+    % hw7-error_rate.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{Rate of error reduction with increasing number of basis functions (decreasing discretization distance).}
     \label{fig:errorrate}
 \end{figure}
