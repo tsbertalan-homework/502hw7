@@ -77,17 +77,17 @@ Constants:
 \end{equation}
 
 
-Change of variables, to create homogeneous boundary conditions:
+Use a change of variables to create homogeneous boundary conditions.
 
 \begin{equation}
     \label{eqn:changeofvars}
     \begin{split}
-        v = u + a x + b \\
-        v' = u' + a \\
+        v(x) = u(x) + a x + b \\
+        v'(x) = u'(x) + a \\
     \end{split}
 \end{equation}
 
-To make the new boundary conditions homogeneous, choose $b=-1$ and $a=-\epsilon$.
+To make the new boundary conditions homogeneous (Dirichlet at $x=0$ and Neumann at $x=1$), choose $b=-1$ and $a=-\epsilon$.
 
 $$
     -f(x) = L[u] = \frac{\partial^2 v}{\partial x^2} + 0 + 0 = L[v]
@@ -95,20 +95,20 @@ $$
 
 That is, the problem does not change with the change-of-variables, only the boundary conditions.
 
-\subsection{Properties of the Green's Function}
+\subsection{Solution by Properties of the Green's Function}
 $$\quad$$
-$G(x,t)$ satisfies the homogeneous problem (that is, $G''(x,t) = 0$):
+$G(x,t)$ satisfies the homogeneous problem (that is, $\partial^2 G(x,t) / \partial x^2 = 0$):
     
 \begin{equation}
     G(x,t) = 
     \left\{ \begin{matrix}
-        C_{1,1} x + C_{1,2}, \quad 0 \le x \le t \\ 
-        C_{2,1} x + C_{2,2}, \quad t \le x \le 1
+        C_{1,1}(t) x + C_{1,2}(t), \quad 0 \le x \le t \\ 
+        C_{2,1}(t) x + C_{2,2}(t), \quad t \le x \le 1
     \end{matrix} \right\}
     =
     \left\{ \begin{matrix}
-        C_{2,1} x + C_{2,2}, \quad 0 \le t \le x \\ 
-        C_{1,1} x + C_{1,2}, \quad x \le t \le 1
+        C_{2,1}(t) x + C_{2,2}(t), \quad 0 \le t \le x \\ 
+        C_{1,1}(t) x + C_{1,2}(t), \quad x \le t \le 1
     \end{matrix} \right\} 
 \end{equation}
 
@@ -130,7 +130,7 @@ $G(x,t)$ is piecewise, but fully continuous:
     \end{split}
 \end{equation}
 
-$G'(x,t)$ has a jump discontinuity of $1/p(x)$, where $p(x)=1$ is taken from the standard from of the second-order operator $L[u(x)]$:
+$G'(x,t)$ has a jump discontinuity of $1/p(x)$, where $p(x)=1$ is taken from the standard from of the second-order operator $L[v(x)]$:
     
 \begin{equation}
     \label{eqn:jump}
@@ -140,18 +140,18 @@ $G'(x,t)$ has a jump discontinuity of $1/p(x)$, where $p(x)=1$ is taken from the
     \end{split}
 \end{equation}
 
-From (\ref{eqn:continuous}) and (\ref{eqn:jump}), we find that $C_{1,1}=-1$ and $C_{2,2}(t)=-t$. So, the completed Green's function for this operator is:
+From (\ref{eqn:continuous}) and (\ref{eqn:jump}), we find that $C_{1,1}=-1$ and $C_{2,2}(t)=-t$. So, the completed Green's function for this operator $L$ is:
 \begin{equation}
     \label{eqn:green}
     G(x,t) = 
     \left\{ \begin{matrix}
-        -x, \quad 0 \le x \le t \\ 
-        -t, \quad t \le x \le 1
+        -x \quad , \quad 0 \le x \le t \\ 
+        -t \quad , \quad t \le x \le 1
     \end{matrix} \right\}
     =
     \left\{ \begin{matrix}
-        -t, \quad 0 \le t \le x \\ 
-        -x, \quad x \le t \le 1
+        -t \quad , \quad 0 \le t \le x \\ 
+        -x \quad , \quad x \le t \le 1
     \end{matrix} \right\} 
 \end{equation}
 
@@ -182,7 +182,7 @@ The true solution can be obtained by inverting the change-of-variables:
 \begin{equation}
     \label{eqn:u(x)}
     \begin{split}
-        u(x) &= v(x) + x/2 + 1 \\
+        u(x) &= v(x) + \epsilon x + 1 \\
         &= 1 + \epsilon x - \frac{m x}{2} + \frac{m x^3}{6} + \frac{A x \cos(\omega)}{\omega} -
         \frac{A \sin(\omega x)}{\omega^2}
     \end{split}
@@ -324,6 +324,7 @@ Besides the first element, most of the main diagonal of $\uuline K$ is repetitio
 \clearpage
 
 \section{Code}
+\label{sec:code}
 
 \code{hw7.py}{hw7.py}
 
