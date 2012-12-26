@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[margin=0.5in]{geometry}
 \usepackage{graphicx}
+% \usepackage{pdfpages}
 
 \usepackage{ulem}  % Allows for double-underlining
 
@@ -197,34 +198,38 @@ Check,
         \frac{\partial^2 u(x)}{\partial x^2} - (-f(x)) &= 0 \quad \checkmark
     \end{split}
 \end{equation}
-    
 
-    
-    
+Algebra is verified in Section \ref{sec:mathematica}.
+
 \section{Finite Element Solution}
 \label{sec:FE_work}
 
 Galerkin Form
 \begin{equation}
     \label{eqn:galerkin}
-    L[\tilde{u}(x)] - f(x) = \epsilon(x) \approx \vec{0}(x)
+    L[\tilde{u}(x)] - f(x) = error(x) \approx \vec{0}(x)
 \end{equation}
 \begin{equation}
     \label{eqn:sumofbases}
     \tilde{u}(x) = \sum_{i=1}^{N}u_i \phi^i(x)
 \end{equation}
 
+
+\begin{equation}
+    \label{eqn:split-integral}
+        \int_a^b{\left[ L[\tilde{u}(x)] - f(x) \right] \phi^i(x) dx } = 0
+\end{equation}
+
+Split this into two separate integrals, then in the left integral, let $\mu=\phi^i(x)$ and $d\eta=\frac{\partial^2\tilde{u}}{\partial x^2} dx$.
 Integrate by parts ($\int \mu d\eta = \mu \eta - \int \eta d\mu$). This reduces the derivatives in the operator from second to first order, which enables the use of linear basis functions.
 
 \begin{equation}
     \begin{split}
-        \int_a^b{\left[ L[\tilde{u}(x)] - f(x) \right] \phi^i(x) dx } &= 0 \\
         \int_a^b L[\tilde{u}(x)] \phi^i(x) dx - \int_a^b f(x) \phi^i(x) dx &= 0 \\
         \int_0^1{ \frac{\partial^2\tilde{u}}{\partial x^2} \phi^i dx } - \int_0^1 f(x) \phi^i(x) dx &= 0 \\
     \end{split}
 \end{equation}
 
-In the left integral, let $\phi^i(x)=\mu$ and $\frac{\partial^2\tilde{u}}{\partial x^2} dx=d\eta$.
 
 \begin{equation}
     \begin{split}
@@ -233,15 +238,15 @@ In the left integral, let $\phi^i(x)=\mu$ and $\frac{\partial^2\tilde{u}}{\parti
     \end{split}
 \end{equation}
 
-Now using (\ref{eqn:sumofbases}) for $\partial \tilde u / \partial x$ and bringing te derivative inside the sum:
+Now use (\ref{eqn:sumofbases}) to express $\partial \tilde u / \partial x$ in terms of basis functions. Bring the derivative inside the sum:
     
 \begin{equation}
     \phi^i(x) \sum u_j \frac{\partial \phi^i}{\partial x} - \int_0^1 \frac{\partial \phi^i}{\partial x} \left( \sum u_j \frac{\partial \phi^j}{\partial x} \right) dx = \int_0^1 f(x) \phi^i(x) dx
 \end{equation}
 
-Since all other basis functions are zero at the right side of the domain, the term on the left, includes the right boundary conditions, applies only to the last basis function. This converts the term to $\phi^i \partial \tilde u / \partial x$. Furthermore, a Dirac delta function can be used, changing the term to $\epsilon \delta_{iN}$.
+Since all other basis functions are zero at the right side of the domain, the term on the left applies only to the last basis function. This allows the use of a Dirac delta function. Combined with the right (Neumann) boundary condition, this changes the term to $\epsilon \delta_{iN}$.
 
-The derivative of $\phi^i$ can be brought inside the adjacent sum, but its product with the derivative of $\phi^j$ is nonzero only for $j=i-1$, $j=i$, and $j=i+1$, by the near-orthogonality of the basis functions. With our linear basis functions, the right-hand-side intergrals must be calculated in piecewise fashion, with the first piece being from the left edge of each hat function to its point, and the second piece being from the point to the right edge.
+The derivative of $\phi^i$ can be brought inside the adjacent sum. Its product with the derivative of $\phi^j$ is zero for values of $j$ but $j=i-1$, $j=i$, and $j=i+1$, by the near-orthogonality of the basis functions. With our linear basis functions, the right-hand-side intergrals must be calculated in piecewise fashion, with the first piece being from the left edge of each hat function to its point, and the second piece being from the point to the right edge.
 
 \pagebreak
 
@@ -260,7 +265,9 @@ This simplifies the equation somewhat.
 
 Here, $\uuline{K}$ is a tridiagonal square matrix. To satisfy the left boundary condition, the first row of $\uuline{K}$ is $1, 0, 0, ...$, and the first element of $\uline F$ is 1.
 
-Besides the first element, most of the main diagonal of $\uuline K$ is repetitions of $2 / h$, where $h = (1 - 0) / (N - 1)$ is half the width of one of the $N$ basis functions. However, the last value in the main diagonal is only half of this, because the product $\frac{\partial \phi^N}{\partial x} \frac{\partial \phi^N}{\partial x}$ only involves the left slope of the hat for the final basis function. Besides the second element, which is zero to satisfy the left boundary condition, the two off-diagonals are repetitions of $-1 / h$ -- from the product of the (opposite-sign) slopes of the overlapping portions of adjacent basis functions.
+With linear basis functions, most of the main diagonal of $\uuline K$ (besides the first element) is repetitions of $2 / h$. Here, $h = (1 - 0) / (N - 1)$ is half the width of one of the $N$ basis functions. However, the last value in the main diagonal is only $1/h$, because the product $\frac{\partial \phi^N}{\partial x} \frac{\partial \phi^N}{\partial x}$ only involves the left slope of the hat for the final basis function. Besides the second element in the first row, which is zero to satisfy the left boundary condition, the two off-diagonals are repetitions of $-1 / h$, from the product of the (opposite-sign) slopes of the overlapping portions of adjacent basis functions.
+
+In Section \ref{sec:results}, we solve this system with the python library \textit{Numpy} (``numerical python'') for various numbers of basis functions, $N$.
 
 \section{Results}
 \label{sec:results}
@@ -269,7 +276,7 @@ Besides the first element, most of the main diagonal of $\uuline K$ is repetitio
     \centering
     \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N5.pdf}
     % hw7-basis_functions-N5.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
-    \caption{Five basis functions.}
+    \caption{Five basis functions. Unscaled basis functions are hats of width $2h$ and unit height. The FE (finite element) solution is the superposition of the scaled basis functions shown here: $u(x)= \sum_{j=1}^{N}{\phi^j(x)}$}
     \label{fig:N5}
 \end{figure}
 
@@ -327,5 +334,16 @@ Besides the first element, most of the main diagonal of $\uuline K$ is repetitio
 \label{sec:code}
 
 \code{hw7.py}{hw7.py}
+
+\section{Algebra by Mathematica}
+\label{sec:mathematica}
+
+% \includepdf[pages={1}]{myfile.pdf}
+\subsection{Generalized in $A$, $\omega$, $m$, $\epsilon$}
+\includegraphics[width=\columnwidth,keepaspectratio=true]{hw7-mathematica-general.pdf}
+
+\pagebreak
+\subsection{Particularized, to Show Satisfied BCs and Nonhomogeneous Equation}
+\includegraphics[width=\columnwidth,keepaspectratio=true]{hw7-mathematica-particular.pdf}
 
 \end{document}          
