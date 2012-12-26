@@ -142,14 +142,15 @@ def do_hw(N, save=False):
         FE_soln.extend(node_soln)
         FE_domains.extend(node_domain)
     if save:
+        ax2.plot(FE_domains, FE_soln, 'r-', label='FE solution')
         ax.plot(FE_domains, FE_soln, 'r-', label='FE solution')
 
     #    ax2.plot(xl_fine, [analytical(x) for x in xl_fine], 'r-', label='analytical solution')
-        ax.scatter(xl, u, label=r'$N=%i$ finite element coeffecients' % N, color='k', marker='d')
+    #    ax.scatter(xl, u, label=r'$N=%i$ finite element coeffecients' % N, color='k', marker='d')
         #    ax.plot(xl_fine, [-forcing(x) for x in xl_fine], 'k--', label=r'forcing function $-f(x)=%.2f sin(%.1f x)+%.1f x$' % (amp, omega, m))
     
     
-        ax.plot(xl_fine, [analytical(x) for x in xl_fine], 'k-', label='analytical')
+        ax.plot(xl_fine, [analytical(x) for x in xl_fine], 'k--', label='analytical')
         fig.suptitle(r'Solution of $\frac{\partial^2 u(x) }{ \partial x^2 }= -f(x)$, BC: $u(0)=1$, $u\'(1)=%.1f$, %i Finite Elements' % (epsilon, N))
         ax.legend(loc='upper left')
         ax2.legend(loc='upper right')
