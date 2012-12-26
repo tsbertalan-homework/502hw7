@@ -276,7 +276,7 @@ In Section \ref{sec:results}, we solve this system with the python library \text
     \centering
     \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-basis_functions-N5.pdf}
     % hw7-basis_functions-N5.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
-    \caption{Five basis functions. Unscaled basis functions are hats of width $2h$ and unit height. The FE (finite element) solution is the superposition of the scaled basis functions shown here: $u(x)= \sum_{j=1}^{N}{\phi^j(x)}$}
+    \caption{Five basis functions. Unscaled basis functions are hats of width $2h$ and unit height. The FE (finite element) solution is the superposition of the scaled basis functions shown here: $u(x)= \sum_{j=1}^{N}{u_j \phi^j(x)}$}
     \label{fig:N5}
 \end{figure}
 
@@ -320,9 +320,32 @@ In Section \ref{sec:results}, we solve this system with the python library \text
     \label{fig:sf100}
 \end{figure}
 
+\pagebreak
+
+\begin{table}
+    \centering
+    \label{table:norms}
+    \begin{tabular}{lc}
+        \hline \\
+        Order  & Vector Norm \\
+        \hline \\
+        None   & 2-norm, $[\sum_{i} abs(a_{i})^2]^{1/2}$ \\
+        \texttt{inf}    &  \texttt{max(abs(x))} \\
+        -\texttt{inf}   &  \texttt{min(abs(x))} \\
+        0      &  \texttt{sum(x != 0)} \\
+        1      &  as below \\
+        -1     &  as below \\
+        2      &  as below \\
+        -2     &  as below \\
+        other  & \texttt{sum(abs(x)**ord)**(1./ord)} \\
+        \hline \\
+    \end{tabular} 
+    \caption{To compare the finite element and Green's function solutions, we need a vector norm to operate on the difference of their solution vectors. Nine matrix norms are available in \texttt{numpy.linalg.norm}. \texttt{inf} is the \texttt{numpy.inf} object.}
+\end{table}
+
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-error_rate.pdf}
+    \includegraphics[width=\columnwidth,keepaspectratio=true]{./hw7-error_rate-mult_orders.pdf}
     % hw7-error_rate.pdf: 1000x600 pixel, 100dpi, 25.40x15.24 cm, bb=0 0 720 432
     \caption{Rate of error reduction with increasing number of basis functions (decreasing discretization distance).}
     \label{fig:errorrate}
