@@ -98,11 +98,11 @@ def do_hw(N, save=False):
         c = b + h    
         phi_i_l = phi_l(i)
         xl_l = list(arange(a, b, (b - a) / 100))
-        yl_l = [phi_i_l(x) for x in xl_l]
+        yl_l = [phi_i_l(x) * u[i] for x in xl_l]
         
         phi_i_r = phi_r(i)
         xl_r = list(arange(b, c, (c - b) / 100))
-        yl_r = [phi_i_r(x) for x in xl_r]
+        yl_r = [phi_i_r(x) * u[i] for x in xl_r]
         
         if save:
             if i==N-1:  # We only want one label in the plot legend, not N labels.
@@ -189,5 +189,5 @@ if __name__=="__main__":
     ax3.set_ylabel('norm(FE_solution - Analytical_solution)')
     for normIndex in range(len(orders)):
         ax3.plot(N_list, norm_list[normIndex], label=ordernames[normIndex])
-    fig3.legend()
+    ax3.legend()
     fig3.savefig('hw7-error_rate-mult_orders.pdf')
