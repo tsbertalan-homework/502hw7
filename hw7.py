@@ -169,7 +169,6 @@ if __name__=="__main__":
     N_list = []
     Nmin = 2
     Nmax = 101
-#    Nmax = 20
     orders=[0, 1, -1, 2, -2]
     norm_list = [[] for order in orders]
     ordernames=['order of %i' % order for order in orders]
