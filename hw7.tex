@@ -57,16 +57,13 @@
 \end{equation}
 
 Boundary conditions:
-
 \begin{equation}
     \begin{split}
         \left. u(x) \right| _{x=0} &= 1 \\
         \left. \frac{\partial u(x)}{\partial x}\right|_{x=1} &= \epsilon
     \end{split}
 \end{equation}
-
 Constants:
-
 \begin{equation}
     \label{eqn:constants}
     \begin{split}
@@ -76,10 +73,7 @@ Constants:
         \epsilon = 0.5
     \end{split}
 \end{equation}
-
-
 Use a change of variables to create homogeneous boundary conditions.
-
 \begin{equation}
     \label{eqn:changeofvars}
     \begin{split}
@@ -87,19 +81,14 @@ Use a change of variables to create homogeneous boundary conditions.
         v'(x) = u'(x) + a \\
     \end{split}
 \end{equation}
-
 To make the new boundary conditions homogeneous (Dirichlet at $x=0$ and Neumann at $x=1$), choose $b=-1$ and $a=-\epsilon$.
-
 $$
     -f(x) = L[u] = \frac{\partial^2 v}{\partial x^2} + 0 + 0 = L[v]
 $$
-
 That is, the problem does not change with the change-of-variables, only the boundary conditions.
-
 \subsection{Solution by Properties of the Green's Function}
 $$\quad$$
 $G(x,t)$ satisfies the homogeneous problem (that is, $\partial^2 G(x,t) / \partial x^2 = 0$):
-    
 \begin{equation}
     G(x,t) = 
     \left\{ \begin{matrix}
@@ -112,16 +101,13 @@ $G(x,t)$ satisfies the homogeneous problem (that is, $\partial^2 G(x,t) / \parti
         C_{1,1}(t) x + C_{1,2}(t), \quad x \le t \le 1
     \end{matrix} \right\} 
 \end{equation}
-
 $G(x,t)$ satisfies homogeneous boundary conditions:
-    
 \begin{equation}
     \begin{split}
         G(0,t) = 0 = C_{1,1} \cdot 0 + C_{1,2}  &\xrightarrow{ } C_{1,2} = 0 \\
         G'(0,t) = 0 = C_{2,1} \quad \quad  &\xrightarrow{ } C_{2,1} = 0
     \end{split}
 \end{equation}
-
 $G(x,t)$ is piecewise, but fully continuous:
 \begin{equation}
     \label{eqn:continuous}
@@ -130,9 +116,7 @@ $G(x,t)$ is piecewise, but fully continuous:
         C_{1,1}(t)\cdot t &= C_{2,2}(t)
     \end{split}
 \end{equation}
-
 $G'(x,t)$ has a jump discontinuity of $1/p(x)$, where $p(x)=1$ is taken from the standard from of the second-order operator $L[v(x)]$:
-    
 \begin{equation}
     \label{eqn:jump}
     \begin{split}
@@ -140,7 +124,6 @@ $G'(x,t)$ has a jump discontinuity of $1/p(x)$, where $p(x)=1$ is taken from the
         0 - C_{1,1}(t) &= 1
     \end{split}
 \end{equation}
-
 From (\ref{eqn:continuous}) and (\ref{eqn:jump}), we find that $C_{1,1}=-1$ and $C_{2,2}(t)=-t$. So, the completed Green's function for this operator $L$ is:
 \begin{equation}
     \label{eqn:green}
@@ -155,7 +138,6 @@ From (\ref{eqn:continuous}) and (\ref{eqn:jump}), we find that $C_{1,1}=-1$ and 
         -x \quad , \quad x \le t \le 1
     \end{matrix} \right\} 
 \end{equation}
-
 The solution (with the change-of-variables) is then given by integrating the product of the Green's function and the forcing function:
 \begin{equation}
     \label{eqn:v(x)}
@@ -166,9 +148,7 @@ The solution (with the change-of-variables) is then given by integrating the pro
         6 A \sin(\omega x)}{6 \omega^2}
     \end{split}
 \end{equation}
-
 Check:
-    
 \begin{equation}
     \begin{split}
         \left. v(x) \right|_{x=0} &= 0 \quad \checkmark \\
@@ -176,10 +156,7 @@ Check:
         \frac{\partial^2 v(x)}{\partial x^2} - (-f(x)) &= 0 \quad \checkmark
     \end{split}
 \end{equation}
-
-
 The true solution can be obtained by inverting the change-of-variables:
-    
 \begin{equation}
     \label{eqn:u(x)}
     \begin{split}
@@ -188,9 +165,7 @@ The true solution can be obtained by inverting the change-of-variables:
         \frac{A \sin(\omega x)}{\omega^2}
     \end{split}
 \end{equation}
-
 Check, 
-
 \begin{equation}
     \begin{split}
         \left. u(x) \right|_{x=0} &= 1 \quad \checkmark \\
@@ -198,12 +173,9 @@ Check,
         \frac{\partial^2 u(x)}{\partial x^2} - (-f(x)) &= 0 \quad \checkmark
     \end{split}
 \end{equation}
-
 Algebra is verified in Section \ref{sec:mathematica}.
-
 \section{Finite Element Solution}
 \label{sec:FE_work}
-
 Galerkin Form
 \begin{equation}
     \label{eqn:galerkin}
@@ -213,45 +185,34 @@ Galerkin Form
     \label{eqn:sumofbases}
     \tilde{u}(x) = \sum_{i=1}^{N}u_i \phi^i(x)
 \end{equation}
-
-
 \begin{equation}
     \label{eqn:split-integral}
         \int_a^b{\left[ L[\tilde{u}(x)] - f(x) \right] \phi^i(x) dx } = 0
 \end{equation}
-
 Split this into two separate integrals, then in the left integral, let $\mu=\phi^i(x)$ and $d\eta=\frac{\partial^2\tilde{u}}{\partial x^2} dx$.
 Integrate by parts ($\int \mu d\eta = \mu \eta - \int \eta d\mu$). This reduces the derivatives in the operator from second to first order, which enables the use of linear basis functions.
-
 \begin{equation}
     \begin{split}
         \int_a^b L[\tilde{u}(x)] \phi^i(x) dx - \int_a^b f(x) \phi^i(x) dx &= 0 \\
         \int_0^1{ \frac{\partial^2\tilde{u}}{\partial x^2} \phi^i dx } - \int_0^1 f(x) \phi^i(x) dx &= 0 \\
     \end{split}
 \end{equation}
-
-
 \begin{equation}
     \begin{split}
         \phi^i(x) \left. \frac{\partial \tilde u}{\partial x} \right|_0^1 - \int_0^1 \left[\frac{\partial \tilde u}{\partial x} \frac{\partial \phi^i}{\partial x} + f(x) \phi^i(x)\right] \\
         \phi^i(x) \left. \frac{\partial \tilde u}{\partial x} \right|_0^1 - \int_0^1 \frac{\partial \tilde u}{\partial x} &= \\ \frac{\partial \phi^i}{\partial x} dx = \int_0^1 f(x) \phi^i(x)
     \end{split}
 \end{equation}
-
 Now use (\ref{eqn:sumofbases}) to express $\partial \tilde u / \partial x$ in terms of basis functions. Bring the derivative inside the sum:
-    
 \begin{equation}
     \phi^i(x) \sum u_j \frac{\partial \phi^i}{\partial x} - \int_0^1 \frac{\partial \phi^i}{\partial x} \left( \sum u_j \frac{\partial \phi^j}{\partial x} \right) dx = \int_0^1 f(x) \phi^i(x) dx
 \end{equation}
-
 Since all other basis functions are zero at the right side of the domain, the term on the left applies only to the last basis function. This allows the use of a Dirac delta function. Combined with the right (Neumann) boundary condition, this changes the term to $\epsilon \delta_{iN}$.
-
 The derivative of $\phi^i$ can be brought inside the adjacent sum. Its product with the derivative of $\phi^j$ is zero for values of $j$ but $j=i-1$, $j=i$, and $j=i+1$, by the near-orthogonality of the basis functions. With our linear basis functions, the right-hand-side intergrals must be calculated in piecewise fashion, with the first piece being from the left edge of each hat function to its point, and the second piece being from the point to the right edge.
 
 \pagebreak
 
 This simplifies the equation somewhat.
-
 \begin{equation}
     \label{eqn:tosolve-sum}
     \begin{split}
@@ -262,7 +223,6 @@ This simplifies the equation somewhat.
         \uuline{K} \cdot \uline{u} &= \uline{F} 
     \end{split}
 \end{equation}
-
 Here, $\uuline{K}$ is a tridiagonal square matrix. To satisfy the left boundary condition, the first row of $\uuline{K}$ is $1, 0, 0, ...$, and the first element of $\uline F$ is 1.
 
 With linear basis functions, most of the main diagonal of $\uuline K$ (besides the first element) is repetitions of $2 / h$. Here, $h = (1 - 0) / (N - 1)$ is half the width of one of the $N$ basis functions. However, the last value in the main diagonal is only $1/h$, because the product $\frac{\partial \phi^N}{\partial x} \frac{\partial \phi^N}{\partial x}$ only involves the left slope of the hat for the final basis function. Besides the second element in the first row, which is zero to satisfy the left boundary condition, the two off-diagonals are repetitions of $-1 / h$, from the product of the (opposite-sign) slopes of the overlapping portions of adjacent basis functions.
@@ -340,7 +300,7 @@ In Section \ref{sec:results}, we solve this system with the python library \text
         other  & \texttt{sum(abs(x)**ord)**(1./ord)} \\
         \hline \\
     \end{tabular} 
-    \caption{To compare the finite element and Green's function solutions, we need a vector norm to operate on the difference of their solution vectors. Nine matrix norms are available in \texttt{numpy.linalg.norm}. \texttt{inf} is the \texttt{numpy.inf} object.}
+    \caption{To compare the finite element and Green's function solutions, we need a vector norm to operate on the difference of their solution vectors. Nine matrix norms are available in \texttt{numpy.linalg.norm}. However, all appear to give the same behavior (see Figure \ref{fig:errorrate}). \texttt{inf} is the \texttt{numpy.inf} object.}
 \end{table}
 
 \begin{figure}[ht]
@@ -358,7 +318,7 @@ In Section \ref{sec:results}, we solve this system with the python library \text
 
 \code{hw7.py}{hw7.py}
 
-\section{Algebra by Mathematica}
+\section{Algebra by \textit{Mathematica}}
 \label{sec:mathematica}
 
 % \includepdf[pages={1}]{myfile.pdf}
